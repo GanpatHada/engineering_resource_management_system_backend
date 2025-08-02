@@ -8,12 +8,18 @@ const { getAvailableCapacity } = require("../services/engineer.service");
 
 // GET /api/assignments
 const getAllAssignments = asyncHandler(async (req, res) => {
-  const assignments = await Assignment.find()
-    .populate("engineerId", "name email")
-    .populate("projectId", "name");
+  let assignments;
+
+  if (req.user.role === "engineer") {
+    assignments = await Assignment.find({ engineerId: req.user._id })
+      .populate("projectId"); // full project document
+  } else {
+    assignments = await Assignment.find()
+      .populate("projectId"); // full project document only
+  }
 
   res.status(200).json(
-    new ApiResponse(200, assignments, "All assignments fetched")
+    new ApiResponse(200, assignments, "Assignments fetched successfully")
   );
 });
 

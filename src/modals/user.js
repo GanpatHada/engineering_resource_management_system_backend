@@ -24,11 +24,10 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["engineer", "manager"],
-      required: true,
     },
     skills: {
       type: [String],
-      default: [],
+      default: undefined,
     },
     seniority: {
       type: String,
@@ -36,7 +35,6 @@ const userSchema = new mongoose.Schema(
     },
     maxCapacity: {
       type: Number,
-      default: 100,
     },
     department: {
       type: String,
