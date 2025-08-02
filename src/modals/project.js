@@ -5,40 +5,44 @@ const projectSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     description: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     startDate: {
       type: Date,
-      required: true
+      required: true,
     },
     endDate: {
       type: Date,
-      required: true
+      required: true,
     },
     requiredSkills: {
       type: [String],
-      default: []
+      default: [],
     },
     teamSize: {
       type: Number,
       required: true,
-      min: 1
+      min: 1,
     },
     status: {
       type: String,
       enum: ["planning", "active", "completed"],
-      default: "planning"
+      default: "planning",
     },
     managerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
-    }
+      required: true,
+    },
+    assigned: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

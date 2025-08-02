@@ -4,6 +4,7 @@ const ApiResponse = require("../utils/apiResponse.util");
 const ApiError = require("../utils/apiError.util");
 const User = require("../modals/user");
 const { getAvailableCapacity } = require("../services/engineer.service");
+const Project = require("../modals/project")
 
 
 // GET /api/assignments
@@ -12,10 +13,10 @@ const getAllAssignments = asyncHandler(async (req, res) => {
 
   if (req.user.role === "engineer") {
     assignments = await Assignment.find({ engineerId: req.user._id })
-      .populate("projectId"); // full project document
+      .populate("projectId");
   } else {
     assignments = await Assignment.find()
-      .populate("projectId"); // full project document only
+      .populate("projectId");
   }
 
   res.status(200).json(
@@ -23,7 +24,6 @@ const getAllAssignments = asyncHandler(async (req, res) => {
   );
 });
 
-// POST /api/assignments
 const createAssignment = asyncHandler(async (req, res) => {
   const {
     engineerId,
@@ -55,6 +55,12 @@ const createAssignment = asyncHandler(async (req, res) => {
     endDate,
     role
   });
+
+  await Project.findByIdAndUpdate(
+    projectId,
+    { $set: { assigned: true } },
+    { new: true }
+  );
 
   res.status(201).json(
     new ApiResponse(201, assignment, "Assignment created successfully")
